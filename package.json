@@ -1,0 +1,20 @@
+{
+  "name": "visualtree",
+  "version": "1.0.0",
+  "description": "Progetto di fotografia per il midterm (MA_GraphicDesign; AccademiaItaliana_FI)",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "vite": "^8.0.0"
+  },
+  "dependencies": {
+    "gsap": "^3.14.2"
+  }
+}
