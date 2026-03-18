@@ -25,7 +25,7 @@ p, a {
     text-transform: uppercase;
     font-family: "Circular Std", sans-serif;
     font-weight: 500;
-    font: 14px;
+    font-size: 12px;
     color: #000;
     transition: color 0.3s;
 }
@@ -179,8 +179,7 @@ nav {
     position: fixed;
     bottom: 2em;
     left: 40%;
-    text-transform: none;
-}
+}   
 
 
 
