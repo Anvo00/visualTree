@@ -94,8 +94,15 @@ nav {
     position: absolute;
     top: 0;
     left: 2em;
-    height: 70px;
+    height: 90px;
     overflow: hidden;
+    will-change: transform;
+}
+
+.project-title {
+    display: block;
+    margin-top: 4px;
+    font-size: 12px;
     will-change: transform;
 }
 
@@ -127,9 +134,9 @@ nav {
 .indicator {
     position: absolute;
     top: 0;
-    right: 0;
+    right: -2em;
     width: 18px;
-    height: 18px;
+    height: 14px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -160,8 +167,28 @@ nav {
     bottom: 2em;
     right: 2em;
     max-width: 40vw;
-    height: calc(50vh - 2em);
+    height: calc(55vh - 2em);
     opacity: 0.9;
+    z-index: 11;    
+}
+
+.overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0);
+    pointer-events: none;
+    z-index: 10;
+    transition: background 0.4s;
+}
+
+.overlay.active {
+    background: rgba(0, 0, 0, 0.6);
+    pointer-events: all;
+}
+
+.preview-img.expanded {
+    cursor: zoom-out;
+    opacity: 1;
 }
 
 .progress-bar {

@@ -49,6 +49,15 @@ document.addEventListener("DOMContentLoaded", () => {
     const imagesPerProject = 6;
     const totalImages = 50;
 
+    const imageNames = [
+        // Progetto 01 - Infanzia
+        ["Art Attack", "GUMBALL", "Diario di un Wedding Planner", "Minecraft", "Spongebob", "Crash bandicoot"],
+        // Progetto 02 - Adolescenza
+        ["Musica classica (André Rieu)", "DANCE", "Mario Kart", "Animal Crossing", "Pianoforte", "Il fu mattia pascal"],
+        // Progetto 03 - Adesso
+        ["Emily in Paris", "High Potential", "Bridgerton", "Halo: Infinity", "Graphic design", "Programmazione"]
+    ];
+
     splitTextIntoSpans(".mask h1");
     populateGallery();
     ScrollTrigger.refresh();
@@ -72,6 +81,12 @@ document.addEventListener("DOMContentLoaded", () => {
     const projects = gsap.utils.toArray(".project");
     const imgElements = document.querySelectorAll(".img img");
 
+    const firstNames = imageNames[0] || [];
+    names.forEach((name, i) => {
+        name.querySelector("p").textContent = firstNames[i] || "";
+        name.classList.toggle("active", i === 0);
+    });
+
     // Dichiarate prima del loop per essere visibili a updateUI
     let isSnapping = false;
     let currentImgIndex = 0;
@@ -94,7 +109,9 @@ document.addEventListener("DOMContentLoaded", () => {
                 ease: "power2.out"
             });
 
+            const currentNames = imageNames[projectIndex] || [];
             names.forEach((name, i) => {
+                name.querySelector("p").textContent = currentNames[i] || "";
                 name.classList.toggle("active", i === positionInProject);
             });
         }
@@ -120,6 +137,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         onComplete: () => {
                             if (firstImageNextProject) {
                                 previewImg.src = firstImageNextProject.src;
+
                                 gsap.to(indicator, { top: "0px", duration: 0.3, ease: "power2.out" });
                                 names.forEach((name, i) => { name.classList.toggle("active", i === 0); });
                             }
@@ -136,7 +154,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 
-    // --- Digit animation ---
+    // === Digit animation ===
     let scrollVelocity = 0;
     let lastScrollTop = 0;
     let activeIndex = -1;
@@ -146,8 +164,9 @@ document.addEventListener("DOMContentLoaded", () => {
         const digitWrapper = project.querySelector(".digit-wrapper");
         const firstDigit = digitWrapper.querySelector(".first");
         const secondDigit = digitWrapper.querySelector(".second");
+        const projectTitle = project.querySelector(".project-title");
 
-        gsap.set([mask, digitWrapper, firstDigit, secondDigit], { y: 0 });
+        gsap.set([mask, digitWrapper, firstDigit, secondDigit, projectTitle], { y: 0 });
         gsap.set(mask, { position: "absolute", top: 0 });
 
         ScrollTrigger.create({
@@ -170,13 +189,14 @@ document.addEventListener("DOMContentLoaded", () => {
                     if (nextProject) {
                         const nextRect = nextProject.getBoundingClientRect();
                         if (nextRect.top <= pushPoint && activeIndex !== i + 1) {
-                            gsap.killTweensOf([mask, digitWrapper, firstDigit, secondDigit]);
+                            gsap.killTweensOf([mask, digitWrapper, firstDigit, secondDigit, projectTitle]);
                             activeIndex = i + 1;
 
-                            gsap.to(mask, { y: -80, duration: 0.3, ease: "power2.out", overwrite: true });
-                            gsap.to(digitWrapper, { y: -80, duration: 0.5, delay: 0.5, ease: "power2.out", overwrite: true });
-                            gsap.to(firstDigit, { y: -80, duration: 0.75, ease: "power2.out", overwrite: true });
-                            gsap.to(secondDigit, { y: -80, duration: 0.75, delay: 0.1, ease: "power2.out", overwrite: true });
+                            gsap.to(mask, { y: -90, duration: 0.3, ease: "power2.out", overwrite: true });
+                            gsap.to(digitWrapper, { y: -90, duration: 0.5, delay: 0.5, ease: "power2.out", overwrite: true });
+                            gsap.to(firstDigit, { y: -90, duration: 0.75, ease: "power2.out", overwrite: true });
+                            gsap.to(secondDigit, { y: -90, duration: 0.75, delay: 0.1, ease: "power2.out", overwrite: true });
+                            gsap.to(projectTitle, { y: -90, duration: 0.4, delay: 0.15, ease: "power2.out", overwrite: true });
                         }
                     }
                 } else {
@@ -195,13 +215,15 @@ document.addEventListener("DOMContentLoaded", () => {
                             const prevWrapper = prevProject.querySelector(".digit-wrapper");
                             const prevFirst = prevWrapper.querySelector(".first");
                             const prevSecond = prevWrapper.querySelector(".second");
-
-                            gsap.killTweensOf([prevMask, prevWrapper, prevFirst, prevSecond]);
+                            const prevTitle = prevProject.querySelector(".project-title");
+                            
+                            gsap.killTweensOf([prevMask, prevWrapper, prevFirst, prevSecond, prevTitle]);
 
                             activeIndex = i - 1;
                             gsap.to([prevMask, prevWrapper], { y: 0, duration: 0.3, ease: "power2.out", overwrite: true });
                             gsap.to(prevFirst, { y: 0, duration: 0.75, ease: "power2.out", overwrite: true });
                             gsap.to(prevSecond, { y: 0, duration: 0.75, delay: 0.1, ease: "power2.out", overwrite: true });
+                            gsap.to(prevTitle, { y: 0, duration: 0.4, delay: 0.15, ease: "power2.out", overwrite: true });
                         }
                     }
                 }
@@ -217,12 +239,12 @@ document.addEventListener("DOMContentLoaded", () => {
         lastScrollTop = st;
     }, { passive: true });
 
-    // --- Navigazione con frecce ---
+    // === Navigazione con frecce ===
     const allImgs = Array.from(document.querySelectorAll(".img img"));
     let currentImageIndex = -1; // ← -1 così il primo press va all'immagine 0
 
     function scrollToImage(index) {
-        if (index < 0 || index >= allImgs.length || isKeyScrolling) return;
+        if (index < 0 || index >= allImgs.length || isKeyScrolling || isExpanded) return;
 
         isKeyScrolling = true;
         currentImageIndex = index;
@@ -245,6 +267,7 @@ document.addEventListener("DOMContentLoaded", () => {
             onComplete: () => {
                 clearTimeout(safetyTimeout);
                 previewImg.src = targetImg.src;
+
                 gsap.to(indicator, {
                     top: positionInProject * indicatorStep + "px",
                     duration: 0.3,
@@ -287,5 +310,107 @@ document.addEventListener("DOMContentLoaded", () => {
             if (!isKeyScrolling) currentImgIndex = getCurrentImageIndex(); // ← risincronizza
             scrollToImage(currentImgIndex - 1);
         }
+    });
+
+
+    // === Preview hover ===
+    const previewImgContainer = document.querySelector(".preview-img");
+    const overlay = document.querySelector(".overlay");
+    let isExpanded = false;
+
+    // Converte la posizione originale in top/left in pixel
+    // così GSAP usa sempre le stesse proprietà in entrambe le direzioni
+    function getOriginalPosition() {
+        const rect = previewImgContainer.getBoundingClientRect();
+        return {
+            top: rect.top,
+            left: rect.left,
+            width: rect.width,
+            height: rect.height
+        };
+    }
+
+    let originalPos = null;
+
+    function expandPreview() {
+        if (isExpanded) return;
+        isExpanded = true;
+        lenis.stop();
+
+        // Salva la posizione originale al momento del click
+        originalPos = getOriginalPosition();
+
+        // Prima porta la preview in top/left fisso (stesso punto visivo)
+        gsap.set(previewImgContainer, {
+            position: "fixed",
+            top: originalPos.top,
+            left: originalPos.left,
+            bottom: "auto",
+            right: "auto",
+            width: originalPos.width,
+            height: originalPos.height,
+            xPercent: 0,
+            yPercent: 0,
+            scale: 1
+        });
+
+        overlay.classList.add("active");
+        previewImgContainer.classList.add("expanded");
+
+        const scaleX = (window.innerWidth * 0.7) / originalPos.width;
+        const scaleY = (window.innerHeight * 0.8) / originalPos.height;
+        const scale = Math.min(scaleX, scaleY);
+
+        // Poi anima verso il centro
+        gsap.to(previewImgContainer, {
+            top: "50%",
+            left: "50%",
+            xPercent: -50,
+            yPercent: -50,
+            scale: scale,
+            duration: 0.7,
+            ease: "power3.inOut"
+        });
+    }
+
+    function collapsePreview() {
+        if (!isExpanded || !originalPos) return;
+        isExpanded = false;
+        lenis.start();
+        overlay.classList.remove("active");
+        previewImgContainer.classList.remove("expanded");
+
+        // Anima dal centro verso la posizione originale salvata
+        gsap.to(previewImgContainer, {
+            top: originalPos.top,
+            left: originalPos.left,
+            xPercent: 0,
+            yPercent: 0,
+            scale: 1,
+            duration: 0.7,
+            ease: "power3.inOut",
+            onComplete: () => {
+                // Ripristina il posizionamento originale bottom/right
+                gsap.set(previewImgContainer, {
+                    top: "auto",
+                    left: "auto",
+                    bottom: "2em",
+                    right: "2em",
+                    scale: 1,
+                    width: "",
+                    height: ""
+                });
+            }
+        });
+    }
+
+    previewImgContainer.addEventListener("click", () => {
+        isExpanded ? collapsePreview() : expandPreview();
+    });
+
+    overlay.addEventListener("click", collapsePreview);
+
+    document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape" && isExpanded) collapsePreview();
     });
 });
