@@ -104,7 +104,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 imgContainer.classList.add("img");
 
                 const img = document.createElement("img");
-                img.src = `/assets/img${imageIndex}.jpg`;
+                img.src = `./assets/img${imageIndex}.jpg`;
                 img.alt = `Project image ${imageIndex}`;
 
                 imgContainer.appendChild(img);
