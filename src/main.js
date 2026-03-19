@@ -13,6 +13,74 @@ document.addEventListener("DOMContentLoaded", () => {
     gsap.ticker.add((time) => { lenis.raf(time * 750); });
     gsap.ticker.lagSmoothing(0);
 
+    // === Intro ===
+    const intro = document.querySelector(".intro");
+    const introBg = document.querySelector(".intro-bg");
+    const introFooter = document.querySelector(".title-footer");
+    let introDismissed = false;
+
+    // Blocca lo scroll del sito finché l'intro è attiva
+    lenis.stop();
+
+    // Anima l'entrata dell'intro (fade in del testo)
+    gsap.fromTo(".intro-content",
+        { opacity: 0, y: 20 },
+        { opacity: 1, y: 0, duration: 1, delay: 0.3, ease: "power2.out" }
+    );
+
+    function dismissIntro() {
+        if (introDismissed) return;
+        introDismissed = true;
+
+        // Rimuove il listener per non triggerare più volte
+        window.removeEventListener("wheel", onIntroScroll);
+        window.removeEventListener("touchmove", onIntroScroll);
+
+        // L'intro sale verso l'alto
+        gsap.to(intro, {
+            yPercent: -100,
+            duration: 1.2,
+            ease: "power3.inOut",
+            onComplete: () => {
+                intro.style.display = "none"; // rimuove dal DOM visivo
+                lenis.start(); // riabilita lo scroll
+            }
+        });
+
+        // Il background dell'intro si muove leggermente più lento (parallax)
+        gsap.to(introBg, {
+            yPercent: 20,
+            duration: 1.2,
+            ease: "power3.inOut"
+        });
+
+        gsap.to(introFooter, {
+            yPercent: 10,
+            duration: 0.8,
+            ease: "power3.inOut"
+        });
+    }
+
+    function onIntroScroll(e) {
+        // Per il touch controlla la direzione
+        if (e.type === "touchmove") {
+            dismissIntro();
+            return;
+        }
+        // Per la rotella controlla che sia verso il basso
+        if (e.deltaY > 0) dismissIntro();
+    }
+
+    window.addEventListener("wheel", onIntroScroll, { passive: true });
+    window.addEventListener("touchmove", onIntroScroll, { passive: true });
+
+    // Anche con freccia giù
+    document.addEventListener("keydown", (e) => {
+        if ((e.key === "ArrowDown" || e.key === "ArrowRight") && !introDismissed) {
+            dismissIntro();
+        }
+    });
+
     function splitTextIntoSpans(selector) {
         const elements = document.querySelectorAll(selector);
         elements.forEach(element => {

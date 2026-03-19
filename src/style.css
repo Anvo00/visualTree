@@ -26,7 +26,7 @@ p, a {
     font-family: "Circular Std", sans-serif;
     font-weight: 500;
     font-size: 12px;
-    color: #000;
+    color: #181818;
     transition: color 0.3s;
 }
 
@@ -38,6 +38,69 @@ nav {
     padding: 2rem;
     display: flex;
     justify-content: space-between;
+}
+
+.intro {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 100;
+    overflow: hidden;
+    will-change: transform;
+}
+
+.intro-bg {
+    position: absolute;
+    inset: 0;
+    background-color: #181818; /* ← cambia con la tua immagine */
+    background-size: cover;
+    background-position: center;
+    will-change: transform;
+    z-index: 0;
+}
+
+/* Overlay scuro sopra l'immagine */
+.intro-bg::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.35);
+}
+
+.intro-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    z-index: 1;
+}
+
+.intro-title {
+    font-family: "Circular Std", sans-serif;
+    font-weight: 500;
+    font-size: 80px;
+    color: #fff;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+}
+
+.intro-subtitle {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 12px;
+    margin-top: 1em;
+    text-transform: uppercase;
+}
+
+.intro-footer {
+    position: absolute;
+    bottom: 2em;
+    left: 50%;
+    transform: translateX(-50%);
+    color: rgba(255, 255, 255, 0.7);
+    z-index: 1;
 }
 
 .whitespace.w-1 {
@@ -146,7 +209,7 @@ nav {
 .symbol {
     width: 12px;
     height: 12px;
-    background-color: #000;
+    background-color: #181818;
     clip-path: polygon(0 50%, 100% 100%, 100% 0);
 }
 
@@ -159,7 +222,7 @@ nav {
 }
 
 .name.active p {
-    color: #000;
+    color: #181818;
 }   
 
 .preview-img {
@@ -197,7 +260,7 @@ nav {
     right: 0;
     width: 8px;
     height: 100vh;
-    background-color: #000;
+    background-color: #181818;
     transform-origin: top;
     transform: scaleY(0);
 }
